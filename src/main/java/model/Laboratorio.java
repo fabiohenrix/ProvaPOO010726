@@ -7,7 +7,11 @@ public class Laboratorio {
     private int bloco;
     private int capacidade;
 
-    public Laboratorio(){
+    public Laboratorio(String nome, int id, int bloco, int capacidade){
+        this.nome = nome;
+        this.id = id;
+        this.bloco = bloco;
+        this.capacidade = capacidade;
     }
 
     public void setNome(){
