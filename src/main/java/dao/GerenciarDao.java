@@ -3,88 +3,155 @@ package dao;
 import model.Equipamento;
 import model.Laboratorio;
 import util.Conexao;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class GerenciarDao {
 
+    public void salvarLaboratorio(Laboratorio laboratorio){
 
-    public void inserirLaboratorio (Laboratorio laboratorio) {
-        String sql = "insert into tabelalabs(nome) values (?)";
+        String sql = "INSERT INTO tabelalabs(nome, bloco, capacidade) VALUES (?,?,?)";
 
-        try (
-                Connection conn = Conexao.getConnection();
-                PreparedStatement statement = conn.prepareStatement(sql);
-        ) {
+        try(Connection conexao = Conexao.getConnection();
+            PreparedStatement statement = conexao.prepareStatement(sql)){
+
             statement.setString(1, laboratorio.getNome());
+            statement.setString(2, laboratorio.getBloco());
+            statement.setInt(3, laboratorio.getCapacidade());
+
             statement.executeUpdate();
-            System.out.printf("Laboratório cadastrado!");
-        } catch (SQLException e) {
+
+        }catch(SQLException e){
             System.out.println("Erro: " + e.getMessage());
         }
+
     }
 
-    public void inserirEquipamento (Equipamento equipamento) {
-        String sql = "insert into tabelaequips(descricao) values (?)";
+    public void salvarEquipamento(Equipamento equipamento){
 
-        try (
-                Connection conn = Conexao.getConnection();
-                PreparedStatement statement = conn.prepareStatement(sql);
-        ) {
-            statement.setString(1, equipamento.getDescricao());
+        String sql = "INSERT INTO tabelaequips(patrimonio, descricao, fabricante, laboratorio_id) VALUES (?,?,?,?)";
+
+        try(Connection conexao = Conexao.getConnection();
+            PreparedStatement statement = conexao.prepareStatement(sql)){
+
+            statement.setString(1, equipamento.getPatrimonio());
+            statement.setString(2, equipamento.getDescricao());
+            statement.setString(3, equipamento.getFabricante());
+            statement.setInt(4, equipamento.getLaboratorioId());
+
             statement.executeUpdate();
-            System.out.printf("Laboratório cadastrado!");
-        } catch (SQLException e) {
+
+        }catch(SQLException e){
             System.out.println("Erro: " + e.getMessage());
         }
-    }
 
+    }
 
     public void deletarLaboratorio(int id){
 
         String sql = "DELETE FROM tabelalabs WHERE id = ?";
 
-        try(
-                Connection conn = Conexao.getConnection();
-                PreparedStatement statement = conn.prepareStatement(sql);
-        ){
-            statement.setInt(1, id);
-            int linhas = statement.executeUpdate();
+        try(Connection conexao = Conexao.getConnection();
+            PreparedStatement statement = conexao.prepareStatement(sql)){
 
-            if (linhas > 0 )
-                System.out.println("Laboratório removido!");
-            else
-                System.out.println("Laboratório não encontrado.");
-        } catch (SQLException e){
-            System.out.println("Erro: "+ e.getMessage());
+            statement.setInt(1, id);
+
+            statement.executeUpdate();
+
+        }catch(SQLException e){
+            System.out.println("Erro: " + e.getMessage());
         }
 
     }
 
-
-    public void deletarEquipamento(int id, String laboratorio){
+    public void deletarEquipamento(int id){
 
         String sql = "DELETE FROM tabelaequips WHERE id = ?";
 
-        try(
-                Connection conn = Conexao.getConnection();
-                PreparedStatement statement = conn.prepareStatement(sql);
-        ){
-            statement.setInt(1, id);
-            int linhas = statement.executeUpdate();
+        try(Connection conexao = Conexao.getConnection();
+            PreparedStatement statement = conexao.prepareStatement(sql)){
 
-            if (linhas > 0 )
-                System.out.println("Equipamento removido!");
-            else
-                System.out.println("Equipamento não encontrado.");
-        } catch (SQLException e){
-            System.out.println("Erro: "+ e.getMessage());
+            statement.setInt(1, id);
+
+            statement.executeUpdate();
+
+        }catch(SQLException e){
+            System.out.println("Erro: " + e.getMessage());
         }
 
     }
 
+    public boolean patrimonioExiste(String patrimonio){
 
+        String sql = "SELECT * FROM tabelaequips WHERE patrimonio = ?";
 
+        try(Connection conexao = Conexao.getConnection();
+            PreparedStatement statement = conexao.prepareStatement(sql)){
+
+            statement.setString(1, patrimonio);
+
+            ResultSet rs = statement.executeQuery();
+
+            return rs.next();
+
+        }catch(SQLException e){
+            System.out.println("Erro: " + e.getMessage());
+        }
+
+        return false;
+    }
+
+    public boolean laboratorioTemEquipamentos(int id){
+
+        String sql = "SELECT * FROM tabelaequips WHERE laboratorio_id = ?";
+
+        try(Connection conexao = Conexao.getConnection();
+            PreparedStatement statement = conexao.prepareStatement(sql)){
+
+            statement.setInt(1, id);
+
+            ResultSet rs = statement.executeQuery();
+
+            return rs.next();
+
+        }catch(SQLException e){
+            System.out.println("Erro: " + e.getMessage());
+        }
+
+        return false;
+    }
+
+    public ArrayList<Laboratorio> listarLaboratorios(){
+
+        ArrayList<Laboratorio> lista = new ArrayList<>();
+
+        String sql = "SELECT * FROM tabelalabs";
+
+        try(Connection conexao = Conexao.getConnection();
+            PreparedStatement statement = conexao.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery()){
+
+            while(rs.next()){
+
+                Laboratorio laboratorio = new Laboratorio();
+
+                laboratorio.setId(rs.getInt("id"));
+                laboratorio.setNome(rs.getString("nome"));
+                laboratorio.setBloco(rs.getString("bloco"));
+                laboratorio.setCapacidade(rs.getInt("capacidade"));
+
+                lista.add(laboratorio);
+            }
+
+        }catch(SQLException e){
+            System.out.println("Erro: " + e.getMessage());
+        }
+
+        return lista;
+    }
 
 }

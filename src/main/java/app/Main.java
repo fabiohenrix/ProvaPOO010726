@@ -4,11 +4,17 @@ import view.JanelaEquipamento;
 import view.JanelaLaboratorio;
 
 public class Main {
-    public static void main(String[] args){
-        JanelaLaboratorio janelalab = new JanelaLaboratorio();
-        JanelaEquipamento janelaequip = new JanelaEquipamento();
-        janelaequip.setVisible(true);
-        janelalab.setVisible(true);
+    public static void main(String[] args) {
+
+        JanelaLaboratorio janelaLab = new JanelaLaboratorio();
+        JanelaEquipamento janelaEquip = new JanelaEquipamento();
+
+        janelaLab.setLocation(100, 100);
+        janelaEquip.setLocation(470, 100);
+
+        janelaLab.setVisible(true);
+        janelaEquip.setVisible(true);
+
     }
 
 }

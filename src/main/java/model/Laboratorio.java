@@ -4,39 +4,48 @@ public class Laboratorio {
 
     private int id;
     private String nome;
-    private int bloco;
+    private String bloco;
     private int capacidade;
 
-    public Laboratorio(String nome, int id, int bloco, int capacidade){
-        this.nome = nome;
+    public Laboratorio() {
+    }
+
+    public Laboratorio(int id, String nome, String bloco, int capacidade) {
         this.id = id;
+        this.nome = nome;
         this.bloco = bloco;
         this.capacidade = capacidade;
     }
 
-    public void setNome(){
-        this.nome = nome;
-    }
-    public void setId(){
-        this.id = id;
-    }
-    public void setCapacidade(){
-        this.capacidade = capacidade;
-    }
-    public void setBloco(){
-        this.bloco = bloco;
-    }
-    public int getBloco(int bloco){
-        return bloco;
-    }
-    public int getCapacidade(int capacidade){
-        return capacidade;
-    }
-    public int getId(int id){
+    public int getId() {
         return id;
     }
-    public String getNome(String nome){
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNome() {
         return nome;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getBloco() {
+        return bloco;
+    }
+
+    public void setBloco(String bloco) {
+        this.bloco = bloco;
+    }
+
+    public int getCapacidade() {
+        return capacidade;
+    }
+
+    public void setCapacidade(int capacidade) {
+        this.capacidade = capacidade;
+    }
 }
